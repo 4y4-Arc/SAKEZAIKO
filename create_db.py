@@ -1,3 +1,5 @@
+#触らないで
+
 import sqlite3
 
 conn = sqlite3.connect("stock.db")
