@@ -4,8 +4,21 @@ from database import get_connection
 app = Flask(__name__)
 
 #ログイン画面
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def login():
+
+    if request.method == "POST":
+
+        passcode = request.form["passcode"]
+
+        if passcode == PASSCODE:
+            return redirect("/inventory")
+        
+        return render_template(
+            "login.html",
+            error="パスコードが違います"
+        )
+    
     return render_template("Login.html")
 
 #在庫一覧表示
