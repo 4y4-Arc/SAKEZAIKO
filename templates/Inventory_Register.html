@@ -1,0 +1,31 @@
+<h1>在庫登録</h1>
+
+<form method="post">
+
+    <label>商品名</label><br>
+    <input type="text" name="name" required><br><br>
+    
+    <label>種類</label><br>
+    <input type="text" name="category" required><br><br>
+
+    <label>在庫数</label><br>
+    <input type="number" name="stock" min="1" required><br><br>
+
+    <label>残量:
+        <span id="amountValue">100</span>%
+    </label><br>
+
+    <input
+        type="range"
+        name="amount"
+        id="amount"
+        min="0"
+        max="100"
+        step="20"
+        value="100"
+        oninput="amountValue.textContent=this.Value">
+    
+    <br><br>
+
+    <button type="submit">登録</button>
+</form>
