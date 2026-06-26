@@ -13,8 +13,13 @@ def login():
 def inventory_list():
     return render_template("Inventory_List.html")
 
-# 在庫検索
+# 検索フォーム
 @app.route("/search")
+def search_form():
+    return render_template("Inventory_Search.html")
+
+# 検索結果
+@app.route("/search/result")
 def inventory_search():
 
     keyword = request.args.get("keyword", "")
@@ -22,20 +27,16 @@ def inventory_search():
     conn = get_connection()
 
     inventory_list = conn.execute(
-        """
-        SELECT *
-        FROM inventory
-        WHERE name LIKE ?
-        """,
+        "SELECT * FROM inventory WHERE name LIKE ?",
         ('%' + keyword + '%',)
     ).fetchall()
 
     conn.close()
 
     return render_template(
-        "Inventory_Search.html",
-        inventory_list=inventory_list
-    )
+    "Search_result.html",
+    inventory_list=inventory_list
+)
 
 # 在庫登録・更新
 @app.route("/register")

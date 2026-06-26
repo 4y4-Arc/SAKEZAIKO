@@ -2,40 +2,52 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>検索結果</title>
+    <title>在庫一覧</title>
 </head>
 <body>
 
-<h1>検索結果</h1>
+    <h1>在庫検索</h1>
 
-{% if inventory_list %}
+    <form action="/search/result" method="get">
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>商品名</th>
-        <th>在庫本数</th>
-    </tr>
+        <p>
+            <label>商品名</label><br>
+            <input type="text" name="keyword">
+        </p>
 
-    {% for item in inventory_list %}
-    <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.stock }}</td>
-    </tr>
-    {% endfor %}
+        <p>
+            <label>種類</label><br>
+            <select name="category">
+                <option value="">すべて</option>
+                <option value="日本酒">日本酒</option>
+                <option value="ワイン">ワイン</option>
+                <option value="ウイスキー">ウイスキー</option>
+            </select>
+        </p>
 
-</table>
+        <p>
+    <label>残量範囲</label><br>
 
-{% else %}
+    <input
+        type="range"
+        name="remain"
+        min="0"
+        max="100"
+        value="50"
+        oninput="remainValue.textContent = this.value + '%'">
 
-<p>該当する商品はありません。</p>
+    <span id="remainValue">50%</span>
 
-{% endif %}
+    <br>
+    <span>0%</span>
+    <span style="margin-left:180px;">100%</span>
+</p>
 
-<br>
+        <button type="submit">検索</button>
 
-<a href="/inventory">戻る</a>
+        <button type="reset">リセット</button>
+
+    </form>
 
 </body>
 </html>

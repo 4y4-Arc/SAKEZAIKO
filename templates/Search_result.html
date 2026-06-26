@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>検索結果</title>
+</head>
+<body>
+
+<h1>検索結果</h1>
+
+{% if inventory_list %}
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>商品名</th>
+        <th>在庫本数</th>
+    </tr>
+
+    {% for item in inventory_list %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.stock }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% else %}
+
+<p>該当する商品はありません。</p>
+
+{% endif %}
+
+<br>
+
+<a href="/search">戻る</a>
+
+</body>
+</html>
