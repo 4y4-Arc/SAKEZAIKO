@@ -3,7 +3,7 @@ from database import get_connection
 
 app = Flask(__name__)
 
-PASSCODE = 1234
+PASSCODE = "1234"
 
 #ログイン画面
 @app.route("/", methods=["GET", "POST"])
