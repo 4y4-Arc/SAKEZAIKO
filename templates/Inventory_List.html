@@ -1,0 +1,54 @@
+<h1>在庫一覧</h1>
+
+<button onclick="location.href='/register'">
+    新規登録
+</button>
+
+<button onclick="location.href='/search'">
+    在庫検索
+</button>
+
+<button onclick="location.href='/recommend'">
+    おすすめ表示
+</button>
+
+<br><br>
+
+<table border="1">
+    <tr>
+        <th>商品名</th>
+        <th>種類</th>
+        <th>在庫数</th>
+        <th>残量</th>
+        <th>更新</th>
+        <th>削除</th>
+    </tr>
+
+    {% for item in items %}
+
+    <tr>
+        <td>{{ item["name"] }}</td>
+        <td>{{ item["category"] }}</td>
+        <td>{{ item["stock"] }}</td>
+        <td>{{ item["amount"] }}%</td>
+
+        <td>
+            <a href="/inventory/update/{{ item['id'] }}">
+                <button>更新</button>
+            </a>
+        </td>
+
+        <td>
+            <form action="/inventory/delete/{{ item['id'] }}" method="post">
+                <button
+                    type="submit"
+                    onclick="return confirm('この商品を削除しますか？')">
+                    削除
+                </button>
+            </form>
+        </td>
+
+    </tr>
+
+    {% endfor %}
+</table>
