@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-from flask import Flask, render_template, request
-=======
 import os
 import json
 from flask import Flask, render_template, request, redirect,jsonify
->>>>>>> dd9682bc1bd06fb4d230d1dcc686776413533bcf
 from database import get_connection
 from dotenv import load_dotenv
 from google import genai
@@ -12,15 +8,10 @@ from google.genai import types
 
 app = Flask(__name__)
 
-<<<<<<< HEAD
-# ログイン画面
-@app.route("/")
-=======
 PASSCODE = "1234"
 
 #ログイン画面
 @app.route("/", methods=["GET", "POST"])
->>>>>>> dd9682bc1bd06fb4d230d1dcc686776413533bcf
 def login():
 
     if request.method == "POST":
@@ -56,7 +47,7 @@ def inventory_list():
 def search_form():
     return render_template("Inventory_Search.html")
 
-<<<<<<< HEAD
+
 # 検索結果
 @app.route("/search/result")
 def inventory_search():
@@ -77,9 +68,6 @@ def inventory_search():
     inventory_list=inventory_list
 )
 
-# 在庫登録・更新
-@app.route("/register")
-=======
 #在庫登録
 @app.route("/register", methods=["GET", "POST"])
 >>>>>>> dd9682bc1bd06fb4d230d1dcc686776413533bcf
@@ -109,9 +97,7 @@ def inventory_register():
     
     return render_template("Inventory_Register.html")
 
-<<<<<<< HEAD
-# おすすめ商品表示
-=======
+
 #在庫更新
 @app.route("/inventory/update/<int:id>", methods=["GET", "POST"])
 def inventory_update(id):
@@ -176,7 +162,6 @@ def inventory_delete(id):
     return redirect("/inventory")
  
 #おすすめ商品表示
->>>>>>> dd9682bc1bd06fb4d230d1dcc686776413533bcf
 @app.route("/recommend")
 def recommendation():
     return render_template("Recommend.html")
