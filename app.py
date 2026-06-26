@@ -70,7 +70,6 @@ def inventory_search():
 
 #在庫登録
 @app.route("/register", methods=["GET", "POST"])
->>>>>>> dd9682bc1bd06fb4d230d1dcc686776413533bcf
 def inventory_register():
 
     if request.method =="POST":
