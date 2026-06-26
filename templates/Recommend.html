@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIお酒ソムリエ</title>
+    <style>
+        /* 全体の見た目をスタイリッシュに整えるCSS */
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h1 { text-align: center; color: #722f37; margin-bottom: 5px; } /* ワインレッド色 */
+        .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #495057; }
+        input[type="text"], select { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input[type="text"]:focus, select:focus { outline: none; border-color: #722f37; box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1); }
+        button { width: 100%; padding: 15px; background-color: #722f37; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
+        button:hover { background-color: #59242a; }
+        #loading { display: none; text-align: center; margin-top: 25px; font-weight: bold; color: #722f37; animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .result-list { margin-top: 30px; }
+        .result-card { background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #dee2e6; border-left: 6px solid #722f37; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .result-card h3 { margin-top: 0; color: #722f37; font-size: 18px; margin-bottom: 10px; }
+        .result-card p { margin: 6px 0; font-size: 14px; line-height: 1.5; }
+        .taste-badge { background-color: #f1f3f5; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 13px; color: #495057; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍷 AIお酒ソムリエ</h1>
+    <p class="subtitle">今日の気分や料理に合わせて、プロのAIが3つの最適なお酒をご提案（空欄があっても大丈夫です！）</p>
+
+    <div class="form-group">
+        <label for="dish">1. 今日のおつまみ・料理</label>
+        <input type="text" id="dish" placeholder="例: 唐揚げ、ピザ、なし（お酒単体）">
+    </div>
+    
+    <div class="form-group">
+        <label for="mood">2. 今日の気分・状態</label>
+        <input type="text" id="mood" placeholder="例: すっきり爽快になりたい、贅沢したい">
+    </div>
+
+    <div class="form-group">
+        <label for="genre">3. 希望するお酒のジャンル</label>
+        <select id="genre">
+            <option value="">何でもOK（おまかせ）</option>
+            <option value="ビール">ビール</option>
+            <option value="ワイン">ワイン</option>
+            <option value="日本酒">日本酒</option>
+            <option value="ウイスキー・ハイボール">ウイスキー・ハイボール</option>
+            <option value="カクテル・サワー">カクテル・サワー</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="scene">4. シチュエーション</label>
+        <input type="text" id="scene" placeholder="例: 一人でまったり映画鑑賞、友達と宅飲み">
+    </div>
+
+    <button onclick="fetchRecommendation()">ソムリエに提案してもらう</button>
+
+    <div id="loading">ソムリエが考えています... 🍾</div>
+
+    <div id="results" class="result-list"></div>
+</div>
+
+<script>
+    // ボタンが押されたときに裏側（FlaskのAPI）と通信するJavaScript
+    async function fetchRecommendation() {
+        // 1. 各入力欄から文字を取得
+        const dish = document.getElementById('dish').value;
+        const mood = document.getElementById('mood').value;
+        const genre = document.getElementById('genre').value;
+        const scene = document.getElementById('scene').value;
+
+        const loadingDiv = document.getElementById('loading');
+        const resultsDiv = document.getElementById('results');
+
+        // 2. ローディングを表示し、前回の結果をリセット
+        loadingDiv.style.display = 'block';
+        resultsDiv.innerHTML = '';
+
+        try {
+            // 3. Flaskの裏側URL（/api/recommend）にPOSTメソッドでデータを送信
+            const response = await fetch('/api/recommend', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dish, mood, genre, scene })
+            });
+
+            if (!response.ok) {
+                throw new Error('ソムリエが一時的に席を外しています（サーバーエラー）');
+            }
+
+            // 4. Flaskから戻ってきたGeminiのJSONデータをパース（解析）
+            const data = await response.json();
+
+            // 5. ループ処理で3つのお酒カードを画面に生成
+            data.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <h3>おすすめ ${index + 1}: ${item.name}</h3>
+                    <p><span class="taste-badge">味わい</span> ${item.taste}</p>
+                    <p style="margin-top: 10px;"><strong>【選定理由】</strong><br>${item.reason}</p>
+                `;
+                resultsDiv.appendChild(card);
+            });
+
+        } catch (error) {
+            // エラーが発生した場合は赤文字で画面に表示
+            resultsDiv.innerHTML = `<p style="color: #dc3545; font-weight: bold; text-align: center;">エラー: ${error.message}</p>`;
+        } finally {
+            // 6. 成功・失敗に関わらずローディングを非表示にする
+            loadingDiv.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
