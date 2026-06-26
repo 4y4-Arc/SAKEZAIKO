@@ -6,7 +6,22 @@
     <input type="text" name="name" required><br><br>
     
     <label>種類</label><br>
-    <input type="text" name="category" required><br><br>
+    <select name = "category" required>
+        <option value = "">選択してください</option>
+        <option value = "ビール（缶）">ビール（缶）</option>
+        <option value = "ビール（瓶）">ビール（瓶）</option>
+        <option value = "チューハイ">チューハイ</option>
+        <option value = "ウイスキー">ウイスキー</option>
+        <option value = "ワイン">ワイン</option>
+        <option value = "日本酒">日本酒</option>
+        <option value = "焼酎">焼酎</option>
+        <option value = "リキュール">リキュール</option>
+        <option value = "ジン">ジン</option>
+        <option value = "ウォッカ">ウォッカ</option>
+        <option value = "ラム">ラム</option>
+        <option value = "テキーラ">テキーラ</option>
+        <option value = "その他">その他</option>
+    </select><br><br>
 
     <label>在庫数</label><br>
     <input type="number" name="stock" min="1" required><br><br>
@@ -23,7 +38,7 @@
         max="100"
         step="20"
         value="100"
-        oninput="amountValue.textContent=this.Value">
+        oninput="amountValue.textContent=this.value">
     
     <br><br>
 
